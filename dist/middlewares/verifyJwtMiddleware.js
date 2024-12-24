@@ -52,6 +52,10 @@ const verifyJwtMiddleware = (secret, options) => {
   const verifyJwtMiddlewareBefore = request => {
     logger.debug(`${FILE}::JWT_TO_VERIFY`, { request, options });
     const token = request.event.headers.authorization;
+    const forwardedOpts = Object.assign(
+      { keyid: request.event.headers['x-site-id'] },
+      options
+    );
     if (!token) {
       throw new LesgoException(
         'No token provided',
@@ -59,7 +63,7 @@ const verifyJwtMiddleware = (secret, options) => {
         401
       );
     }
-    const decoded = verifyJwt(token, secret, options);
+    const decoded = verifyJwt(token, secret, forwardedOpts);
     logger.debug(`${FILE}::JWT_VERIFIED`, { decoded });
     request.event.jwt = decoded;
   };

@@ -28,6 +28,10 @@ const verifyJwtMiddleware = (secret?: string, options?: VerifyInputOptions) => {
   const verifyJwtMiddlewareBefore = (request: middy.Request) => {
     logger.debug(`${FILE}::JWT_TO_VERIFY`, { request, options });
     const token = request.event.headers.authorization;
+    const forwardedOpts = {
+      keyid: request.event.headers['x-site-id'],
+      ...options,
+    };
 
     if (!token) {
       throw new LesgoException(
@@ -37,7 +41,7 @@ const verifyJwtMiddleware = (secret?: string, options?: VerifyInputOptions) => {
       );
     }
 
-    const decoded = verifyJwt(token, secret, options);
+    const decoded = verifyJwt(token, secret, forwardedOpts);
     logger.debug(`${FILE}::JWT_VERIFIED`, { decoded });
 
     request.event.jwt = decoded;
