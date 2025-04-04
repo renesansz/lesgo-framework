@@ -177,10 +177,10 @@
   },
   "engineStrict": true,
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.0.0"
   },
   "peerDependencies": {
-    "serverless": "^3.0.0"
+    "serverless": "^4.0.0"
   },
   "sideEffects": false
 }
